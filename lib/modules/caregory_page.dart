@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_application_4/products_details.dart';
+import 'package:flutter_application_4/modules/products_details.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
