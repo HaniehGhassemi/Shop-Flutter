@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'models/product.dart';
+import '../models/product.dart';
 
 class ProductsPage extends StatefulWidget {
   String? categoryName;
