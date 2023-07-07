@@ -22,7 +22,7 @@ class _MainPage extends State<MainPage> {
   final screens = [
     HomePage(),
     UsersPage(),
-    NewProduct(),
+    newProducts(),
     AboutUs(),
   ];
 
@@ -248,15 +248,11 @@ class ModalBottomSheet {
                                     const SizedBox(
                                       width: 15,
                                     ),
-                                    DropdownButton(
+                                    DropdownButtonFormField(
                                         value: dropdownValue,
                                         elevation: 16,
                                         style: const TextStyle(
                                             color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
                                         items: list!
                                             .map<DropdownMenuItem<dynamic>>(
                                                 (dynamic value) {
