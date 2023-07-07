@@ -31,6 +31,7 @@ class _ProductsPageState extends State<ProductsPage> {
               title: Text(widget.categoryName!),
             ),
             body: Container(
+              padding: const EdgeInsets.only(top: 5.0),
               color: Colors.white,
               child: ListView.builder(
                 itemCount: _categoryProducts!.length,
