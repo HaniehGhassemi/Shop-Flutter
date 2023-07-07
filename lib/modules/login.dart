@@ -1,83 +1,120 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_4/modules/caregory_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'home_layout.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
+class LoginPage extends StatefulWidget {
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  String user = '', password = '';
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Container(
-        height: 400,
-        width: 300,
-        //color: Colors.purple,
-        padding: const EdgeInsets.all(30),
-        decoration: BoxDecoration(
-            color: Colors.pink[100],
-            border: Border.all(
-              color: Colors.grey,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(50))),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                onChanged: ((value) {
-                  user = value;
-                  print(user);
-                }),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'نام کاربری',
-                  hintText: 'نام کاربری خود را وارد کنید',
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Login',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Please sign in to continue.',
+              style:
+                  TextStyle(fontSize: 16, color: Color.fromARGB(91, 0, 0, 0)),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color(0xFFF6F7F8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
                 ),
+                hintText: 'Username',
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextField(
-                onChanged: ((value) {
-                  password = value;
-                  print(password);
-                }),
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'رمز عبور',
-                    hintText: 'رمز عبور را وارد کنید'),
-                obscureText: true,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: 150,
-                height: 50,
-                child: ElevatedButton(
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _passwordController,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color(0xFFF6F7F8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: 'Password',
+                suffixIcon: IconButton(
+                  icon: Icon(_obscurePassword
+                      ? Icons.visibility_off
+                      : Icons.visibility),
                   onPressed: () {
-                    if (user == 'ali' && password == '123456') {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  CategoryPage()));
-                    }
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
                   },
-                  child: const Text('ورود به حساب'),
                 ),
               ),
-              SizedBox(
-                height: 30,
-              )
-            ]),
-      )),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                final response = await http
+                    .post(Uri.parse('https://fakestoreapi.com/auth/login'),
+                        body: jsonEncode({
+                          'username': _usernameController.text,
+                          'password': _passwordController.text,
+                        }),
+                        headers: {
+                      'Content-Type': 'application/json',
+                    });
+                if (response.statusCode == 200) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Invalid username or password'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: Text('Login'),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFF13E17),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
