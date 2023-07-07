@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_4/modules/about_us.dart';
 import 'package:flutter_application_4/modules/newProducts.dart';
-import 'package:flutter_application_4/modules/userList.dart';
+import 'package:flutter_application_4/modules/users_list.dart';
 import 'homePage.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class _MainPage extends State<MainPage> {
   int index = 0;
   final screens = [
     HomePage(),
-    UserList(),
+    UsersPage(),
     NewProduct(),
     AboutUs(),
   ];
