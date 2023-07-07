@@ -18,7 +18,7 @@ class _AboutUsState extends State<AboutUs> {
           children: <Widget>[
             SizedBox(height: 16),
             Image(
-              image: AssetImage('assets/img/buyme.png'),
+              image: AssetImage('img/buyme.png'),
               height: 200,
             ),
             SizedBox(height: 32),
