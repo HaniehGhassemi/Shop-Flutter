@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter_application_4/modules/products_details.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+
+import 'product_list.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
