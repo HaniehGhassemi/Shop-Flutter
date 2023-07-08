@@ -21,4 +21,21 @@ class Product {
       parsedJson['rating'],
     );
   }
+
+  static fromArrayJson(List<dynamic> parsedJson) {
+    List<Product> all = [];
+    parsedJson.forEach((element) => all.add(Product(
+      element['id'],
+      element['title'],
+      element['price'].toString(),
+      element['description'],
+      element['category'],
+      element['image'],
+      element['rating'],
+    ))
+    );
+
+    return all;
+
+  }
 }
