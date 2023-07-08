@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'modules/home_layout.dart';
-import 'modules/search_product.dart';
+import 'package:flutter_application_4/modules/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
           body: child,
         );
       },
-      home: MainPage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

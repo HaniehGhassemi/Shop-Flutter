@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter_application_4/modules/home_layout.dart';
+import 'package:flutter_application_4/modules/product_details.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -27,9 +29,7 @@ class _ProductsPageState extends State<ProductsPage> {
     return _categoryProducts!.isEmpty
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
-            appBar: AppBar(
-              title: Text(widget.categoryName!),
-            ),
+            appBar: MyAppBar(),
             body: Container(
               padding: const EdgeInsets.only(top: 5.0),
               color: Colors.white,
@@ -38,122 +38,146 @@ class _ProductsPageState extends State<ProductsPage> {
                 itemBuilder: (BuildContext context, int index) {
                   Product product = Product.fromJson(_categoryProducts![index]);
                   double screenHeight = MediaQuery.of(context).size.height;
-                  return Material(
-                    borderRadius: BorderRadius.circular(20.0),
-                    // clipBehavior: Clip.hardEdge,
-                    child: Container(
-                      height: screenHeight / 4.5,
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 245, 246, 247),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.network(
-                            product.image,
-                            height: screenHeight / 4.5,
-                            width: screenHeight / 4.5,
-                            fit: BoxFit.contain,
-                            alignment: Alignment.center,
+                  return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductPage(productId: product.id),
                           ),
-                          const SizedBox(
-                            width: 20.0,
+                        );
+                      },
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        // clipBehavior: Clip.hardEdge,
+                        child: Container(
+                          height: screenHeight / 4.5,
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 245, 246, 247),
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.topRight,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                product.image,
+                                height: screenHeight / 4.5,
+                                width: screenHeight / 4.5,
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
+                                    Stack(
+                                      alignment: Alignment.topRight,
                                       children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 20.0, right: 30.0),
-                                            child: Text(
-                                              product.title,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 19.0,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.black,
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 20.0, right: 30.0),
+                                                child: Text(
+                                                  product.title,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontSize: 19.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 10.0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                    const Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 10.0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              const Icon(
-                                                Icons.star,
-                                                color: Colors.orange,
-                                                size: 12,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.star,
+                                                    color: Colors.orange,
+                                                    size: 12,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5.0,
+                                                  ),
+                                                  Text(
+                                                    '${product.rating['rate']}',
+                                                    style: const TextStyle(
+                                                      color: Color.fromARGB(
+                                                          255, 255, 94, 0),
+                                                      fontSize: 13,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
                                               ),
                                               const SizedBox(
-                                                width: 5.0,
+                                                height: 5.0,
                                               ),
                                               Text(
-                                                '${product.rating['rate']}',
+                                                '${product.price} EGP',
                                                 style: const TextStyle(
                                                   color: Color.fromARGB(
                                                       255, 255, 94, 0),
-                                                  fontSize: 13,
+                                                  fontSize: 18.0,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Text(
-                                            '${product.price} EGP',
-                                            style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 255, 94, 0),
-                                              fontSize: 18.0,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
+                        ),
+                      ));
                 },
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainPage(),
+                  ),
+                );
+              },
+              child: const Icon(Icons.home, color: Color(0xFFF44336)),
             ));
   }
 

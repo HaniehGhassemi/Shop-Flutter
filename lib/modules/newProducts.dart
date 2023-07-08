@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -54,6 +55,9 @@ class _newProductsState extends State<newProducts> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Product Price',
@@ -124,9 +128,9 @@ class _newProductsState extends State<newProducts> {
                         vertical: 7.5,
                       ),
                       color: Colors.blue,
-                      onPressed: ()async  {
+                      onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          var res =await createProduct();
+                          var res = await createProduct();
                           if (res == true) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -137,20 +141,17 @@ class _newProductsState extends State<newProducts> {
                                 padding: EdgeInsets.all(25),
                               ),
                             );
-                          }
-                          else {
+                          } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Error',
-                                style: TextStyle(
-                                  color: Colors.white
+                              const SnackBar(
+                                content: Text(
+                                  'Error',
+                                  style: TextStyle(color: Colors.white),
                                 ),
+                                backgroundColor: Colors.red,
+                                padding: EdgeInsets.all(25),
                               ),
-                              backgroundColor: Colors.red,
-                              padding: EdgeInsets.all(25),
-                            ),
-                          );
+                            );
                           }
                         }
                       },
@@ -185,7 +186,7 @@ class _newProductsState extends State<newProducts> {
       setState(() {
         _categories = parsed;
       });
-    } 
+    }
   }
 
   Future<bool> createProduct() async {
