@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
           body: child,
         );
       },
-      home: MainPage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
