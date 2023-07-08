@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter_application_4/products_details.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+
+import 'product_list.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -26,33 +26,30 @@ class _CategoryPageState extends State<CategoryPage> {
     return _categories!.isEmpty
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
-            appBar: AppBar(
-              title: const Text('دسته ها'),
-            ),
             body: Container(
-              color: Colors.blue[100],
-              child: ListView.builder(
-                itemCount: _categories!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductsPage(
-                              categoryName: _categories![index],
-                            ),
+            color: Colors.blue[100],
+            child: ListView.builder(
+              itemCount: _categories!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsPage(
+                            categoryName: _categories![index],
                           ),
-                        );
-                      },
-                      child: Text(_categories![index]),
-                    ),
-                  );
-                },
-              ),
-            ));
+                        ),
+                      );
+                    },
+                    child: Text(_categories![index]),
+                  ),
+                );
+              },
+            ),
+          ));
   }
 
   Future<void> getCategories() async {
