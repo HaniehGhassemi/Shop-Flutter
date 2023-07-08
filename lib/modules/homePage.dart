@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'product_list.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -68,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              CategoryPage(categoryName: categories[index]),
+                              ProductsPage(categoryName: categories[index]),
                         ),
                       );
                     },
@@ -171,105 +173,105 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class CategoryPage extends StatefulWidget {
-  final String categoryName;
+// class CategoryPage extends StatefulWidget {
+//   final String categoryName;
 
-  CategoryPage({required this.categoryName});
+//   CategoryPage({required this.categoryName});
 
-  @override
-  _CategoryPageState createState() => _CategoryPageState();
-}
+//   @override
+//   _CategoryPageState createState() => _CategoryPageState();
+// }
 
-class _CategoryPageState extends State<CategoryPage> {
-  List<Product> categoryProducts = [];
+// class _CategoryPageState extends State<CategoryPage> {
+//   List<Product> categoryProducts = [];
 
-  @override
-  void initState() {
-    super.initState();
-    fetchCategoryProducts();
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchCategoryProducts();
+//   }
 
-  Future<void> fetchCategoryProducts() async {
-    final response = await http.get(Uri.parse(
-        'https://fakestoreapi.com/products/category/${widget.categoryName}'));
-    if (response.statusCode == 200) {
-      setState(() {
-        Iterable list = json.decode(response.body);
-        categoryProducts =
-            list.map((model) => Product.fromJson(model)).toList();
-      });
-    } else {
-      throw Exception('Failed to load category products');
-    }
-  }
+//   Future<void> fetchCategoryProducts() async {
+//     final response = await http.get(Uri.parse(
+//         'https://fakestoreapi.com/products/category/${widget.categoryName}'));
+//     if (response.statusCode == 200) {
+//       setState(() {
+//         Iterable list = json.decode(response.body);
+//         categoryProducts =
+//             list.map((model) => Product.fromJson(model)).toList();
+//       });
+//     } else {
+//       throw Exception('Failed to load category products');
+//     }
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          itemCount: categoryProducts.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-          ),
-          itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(categoryProducts[index].image),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          categoryProducts[index].title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '${categoryProducts[index].price}\$',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: GridView.builder(
+//           itemCount: categoryProducts.length,
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 2,
+//             childAspectRatio: 0.75,
+//             crossAxisSpacing: 16,
+//             mainAxisSpacing: 16,
+//           ),
+//           itemBuilder: (context, index) {
+//             return Container(
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(8),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Expanded(
+//                     child: Container(
+//                       decoration: BoxDecoration(
+//                         image: DecorationImage(
+//                           image: NetworkImage(categoryProducts[index].image),
+//                           fit: BoxFit.cover,
+//                         ),
+//                         borderRadius: BorderRadius.circular(8),
+//                       ),
+//                     ),
+//                   ),
+//                   Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           categoryProducts[index].title,
+//                           maxLines: 1,
+//                           overflow: TextOverflow.ellipsis,
+//                           style: TextStyle(
+//                             fontSize: 16,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+//                         SizedBox(height: 4),
+//                         Text(
+//                           '${categoryProducts[index].price}\$',
+//                           style: TextStyle(
+//                             fontSize: 14,
+//                             color: Colors.grey[600],
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class Product {
   final int id;
@@ -289,6 +291,95 @@ class Product {
       title: json['title'],
       price: json['price'].toDouble(),
       image: json['image'],
+    );
+  }
+}
+
+class ProductPage extends StatefulWidget {
+  final int productId;
+
+  ProductPage({required this.productId});
+
+  @override
+  _ProductPageState createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  Product? product;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProduct();
+  }
+
+  Future<void> fetchProduct() async {
+    final response = await http.get(
+        Uri.parse('https://fakestoreapi.com/products/${widget.productId}'));
+    if (response.statusCode == 200) {
+      setState(() {
+        product = Product.fromJson(json.decode(response.body));
+      });
+    } else {
+      throw Exception('Failed to load product');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (product == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(product!.image),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              product!.title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              '${product!.price}\$',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Description:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+          ],
+        ),
+      ),
     );
   }
 }
